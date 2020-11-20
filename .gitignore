@@ -1,0 +1,14 @@
+build
+node_modules/
+.sass-cache/
+.tmp/
+/dist
+*bundle.js
+.vscode/
+npm-debug.log
+src-1
+kraken.menu.js
+kraken.config.js
+package-lock.json
+.DS_Store
+/.idea
