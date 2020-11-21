@@ -1,35 +1,39 @@
 import * as http from "http";
 import * as Http from "http";
 import { ServerResponse } from "http";
+import * as fs from "fs";
+import * as url from "url";
+import * as path from "path";
 
 const server = http.createServer();
+// const staticPath = path.resolve(__dirname, "public");
 
 server.on("request", (req: Http.IncomingMessage, res: ServerResponse) => {
-  const url = req.url;
-
-  if (req.method === "POST") {
-    let arr = [];
-    req.on("data", function (chunk: Buffer) {
-      arr.push(chunk);
-    });
-    req.on("end", function () {
-      console.log(Buffer.concat(arr).toString());
-    });
+  const { method, url: urlPath } = req;
+  if (method !== "GET") {
+    res.statusCode = 200;
+    res.end();
+    return;
   }
-  res.setHeader('zhouyijun', "niubi")
-  console.log(res.statusCode);
-  console.log(req.headers);
-  console.log(req.method);
-  console.log(req.url);
-  if (url === "/data") {
-    res.end(
-      JSON.stringify({
-        data: [1, 2, 3],
-      })
-    );
-  } else {
-    res.end("hi");
+  const { pathname } = url.parse(urlPath);
+  let fileName = pathname.substr(1);
+  const cacheAge = 3600 * 24;
+  if (!fileName) {
+    fileName = "index.html";
   }
+  fs.readFile(path.resolve("public", fileName), function (e, data) {
+    if (e) {
+      if (e.errno === -2) {
+        res.statusCode = 404;
+        fs.readFile(path.resolve("public", "404.html"), function (e, d) {
+          res.end(d);
+        });
+      }
+      return;
+    }
+    res.setHeader("Cache-Control", `public,max-age=${cacheAge}`);
+    res.end(data);
+  });
 });
 
 server.listen(8888);
