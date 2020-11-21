@@ -6,10 +6,7 @@ const server = http.createServer();
 
 server.on("request", (req: Http.IncomingMessage, res: ServerResponse) => {
   const url = req.url;
-  console.log(res.statusCode);
-  console.log(req.headers);
-  console.log(req.method);
-  console.log(req.url);
+
   if (req.method === "POST") {
     let arr = [];
     req.on("data", function (chunk: Buffer) {
@@ -19,6 +16,11 @@ server.on("request", (req: Http.IncomingMessage, res: ServerResponse) => {
       console.log(Buffer.concat(arr).toString());
     });
   }
+  res.setHeader('zhouyijun', "niubi")
+  console.log(res.statusCode);
+  console.log(req.headers);
+  console.log(req.method);
+  console.log(req.url);
   if (url === "/data") {
     res.end(
       JSON.stringify({
