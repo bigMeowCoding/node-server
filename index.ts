@@ -35,4 +35,6 @@ app.post('/test',(req:any,res:any)=> {
     return;
 
 })
+const assetsPath = path.join(__dirname, "public");
+app.use(express.static(assetsPath));
 app.listen(port);
