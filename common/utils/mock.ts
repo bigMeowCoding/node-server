@@ -1,4 +1,4 @@
-import { glob } from "glob";
+import {glob} from "glob";
 
 const MOCK_FILE_GLOB = "mock/**/*.[jt]s";
 export const DEFAULT_METHOD = "POST";
@@ -31,34 +31,33 @@ function getMock(param: { obj: any; key: string }): IMock {
   };
 }
 
-export function getMockData() {
-  const ret = [MOCK_FILE_GLOB]
-    .reduce<string[]>((memo, pattern) => {
-      memo.push(...glob.sync(pattern));
-      return memo;
-    }, [])
-    .reduce<Record<string, any>>((memo, file) => {
-      console.log(memo);
-      const mockFile = `${process.cwd()}/${file}`;
-      let m;
-      try {
-        m = require(mockFile);
-      } catch (e) {
-        throw new Error(
-          `Mock file ${mockFile} parse failed.\n${(e as Error).message}`
-        );
-      }
-      const obj = m?.default || m || {};
-      console.log(obj);
-      for (const key of Object.keys(obj)) {
-        const mock = getMock({ key, obj });
-        mock.file = mockFile;
-        const id = `${mock.method} ${mock.path}`;
-        if (!memo[id]) {
-          memo[id] = mock;
+export function getMockData(): Record<string, IMock> {
+  return [MOCK_FILE_GLOB]
+      .reduce<string[]>((memo, pattern) => {
+        memo.push(...glob.sync(pattern));
+        return memo;
+      }, [])
+      .reduce<Record<string, any>>((memo, file) => {
+        console.log(memo);
+        const mockFile = `${process.cwd()}/${file}`;
+        let m;
+        try {
+          m = require(mockFile);
+        } catch (e) {
+          throw new Error(
+              `Mock file ${mockFile} parse failed.\n${(e as Error).message}`
+          );
         }
-      }
-      return memo;
-    }, {});
-  return ret;
+        const obj = m?.default || m || {};
+        console.log(obj);
+        for (const key of Object.keys(obj)) {
+          const mock = getMock({key, obj});
+          mock.file = mockFile;
+          const id = `${mock.method} ${mock.path}`;
+          if (!memo[id]) {
+            memo[id] = mock;
+          }
+        }
+        return memo;
+      }, {});
 }
