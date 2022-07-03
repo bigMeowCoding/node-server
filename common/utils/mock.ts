@@ -21,8 +21,14 @@ function parseKey(key: string) {
   }
 }
 
-function getMock(param: { obj: any; key: string }) {
+function getMock(param: { obj: any; key: string }): IMock {
+  const { obj, key } = param;
   const { method, path } = parseKey(param.key);
+  return {
+    method,
+    path,
+    handler: obj[key],
+  };
 }
 
 export function getMockData() {
@@ -32,6 +38,7 @@ export function getMockData() {
       return memo;
     }, [])
     .reduce<Record<string, any>>((memo, file) => {
+      console.log(memo);
       const mockFile = `${process.cwd()}/${file}`;
       let m;
       try {
@@ -45,7 +52,13 @@ export function getMockData() {
       console.log(obj);
       for (const key of Object.keys(obj)) {
         const mock = getMock({ key, obj });
+        mock.file = mockFile;
+        const id = `${mock.method} ${mock.path}`;
+        if (!memo[id]) {
+          memo[id] = mock;
+        }
       }
       return memo;
     }, {});
+  return ret;
 }
