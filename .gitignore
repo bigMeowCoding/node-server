@@ -12,3 +12,4 @@ kraken.config.js
 package-lock.json
 .DS_Store
 /.idea
+pnpm-lock.yaml

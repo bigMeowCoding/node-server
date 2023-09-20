@@ -38,8 +38,9 @@ export function getMockData(): Record<string, IMock> {
         return memo;
       }, [])
       .reduce<Record<string, any>>((memo, file) => {
-        console.log(memo);
+
         const mockFile = `${process.cwd()}/${file}`;
+        console.log(mockFile,'mockfile====');
         let m;
         try {
           m = require(mockFile);
