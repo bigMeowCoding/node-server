@@ -7,6 +7,7 @@ const app = express();
 const port = 8888;
 // const staticPath = path.resolve(__dirname, "public");
 app.use(mockMiddleWare);
+console.log('begi----n')
 
 app.get("/", (req: any, res: any) => {
   const { url: urlPath } = req;
@@ -16,6 +17,7 @@ app.get("/", (req: any, res: any) => {
   if (!fileName) {
     fileName = "index.html";
   }
+
   fs.readFile(path.resolve("public", fileName), function (e, data) {
     if (e) {
       if (e.errno === -2) {
@@ -33,6 +35,7 @@ app.get("/", (req: any, res: any) => {
 app.post("/test", (req: any, res: any) => {
   const { method, url: urlPath } = req;
   res.status(200).json({
+    errcode:'0402200110022',
     data: { a: "test" },
   });
   return;

@@ -1,0 +1,41 @@
+<?xml version="1.0" standalone="no"?>
+  <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+  <svg>
+  <metadata>
+  Created by font-carrier
+  </metadata>
+  <defs>
+  <font id="icon-font" horiz-adv-x="1024" vert-adv-y="1024" >
+    <font-face
+      
+      font-family="icon-font"
+      
+      font-weight="400"
+      
+      font-stretch="normal"
+      
+      units-per-em="1024"
+      
+      ascent="812"
+      
+      descent="-212"
+      
+    />
+      <missing-glyph />
+
+      
+      <glyph glyph-name="x" unicode="&#x78;" horiz-adv-x="100"
+        d="M20 20 L50 20 L50 -20 Z" />
+      
+
+      
+      <glyph glyph-name="uniE001" unicode="&#xE001;" d="M128 812A128-128 0 0 0 0 684V-84A128-128 0 0 0 128-212H896A128-128 0 0 0 1024-84V684A128-128 0 0 0 896 812H128ZM968 524A96-96 0 0 1 872.96 428L744.64 202.784A96-96 0 1 1 592.704 194.08L470.272 360.8A95.872-95.872 0 0 1 423.296 357.344L260.224 167.136A32.192-32.192 0 0 1 253.568 161.248 96-96 0 1 1 218.112 216.288L366.784 389.728A96-96 0 1 1 520.768 400.096L644.224 231.84A96-96 0 0 1 688.96 234.4L811.456 449.44A96-96 0 1 1 968 524Z"  horiz-adv-x="1024" vert-adv-y="1024"  />
+
+      
+      <glyph glyph-name="uniE002" unicode="&#xE002;" d="M128 812A128-128 0 0 0 0 684V-84A128-128 0 0 0 128-212H896A128-128 0 0 0 1024-84V684A128-128 0 0 0 896 812H128ZM968 524A96-96 0 0 1 872.96 428L744.64 202.784A96-96 0 1 1 592.704 194.08L470.272 360.8A95.872-95.872 0 0 1 423.296 357.344L260.224 167.136A32.192-32.192 0 0 1 253.568 161.248 96-96 0 1 1 218.112 216.288L366.784 389.728A96-96 0 1 1 520.768 400.096L644.224 231.84A96-96 0 0 1 688.96 234.4L811.456 449.44A96-96 0 1 1 968 524Z"  horiz-adv-x="1024" vert-adv-y="1024"  />
+
+      
+
+  </font>
+  </defs>
+</svg>
