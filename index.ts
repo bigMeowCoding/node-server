@@ -3,10 +3,11 @@ import * as url from "url";
 import * as path from "path";
 import { mockMiddleWare } from "./middleware/mock";
 const express = require("express");
+const multer = require("multer");
 const app = express();
 const port = 8888;
 // const staticPath = path.resolve(__dirname, "public");
-app.use(mockMiddleWare);
+// app.use(mockMiddleWare);
 
 app.get("/", (req: any, res: any) => {
   const { url: urlPath } = req;
@@ -37,6 +38,34 @@ app.post("/test", (req: any, res: any) => {
   });
   return;
 });
+
+// 配置 multer 用于文件上传
+const storage = multer.diskStorage({
+  destination: function (req: any, file: any, cb: any) {
+    cb(null, "public/uploads/");
+  },
+  filename: function (req: any, file: any, cb: any) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+// 添加文件上传路由
+app.post("/upload", upload.single("file"), (req: any, res: any) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "没有文件上传" });
+  }
+
+  const fileUrl = `${req.protocol}://${req.get("host")}/uploads/${
+    req.file.filename
+  }`;
+  res.status(200).json({
+    message: "文件上传成功",
+    url: fileUrl,
+  });
+});
+
 const assetsPath = path.join(__dirname, "public");
 app.use(express.static(assetsPath));
 app.listen(port);
