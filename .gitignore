@@ -1,15 +1,26 @@
-build
+# Dependencies
 node_modules/
-.sass-cache/
-.tmp/
-/dist
-*bundle.js
+
+# Environment variables
+.env
+
+# Build files
+*.xlsx
+*.xls
+
+# IDE
 .vscode/
-npm-debug.log
-src-1
-kraken.menu.js
-kraken.config.js
-package-lock.json
+.idea/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# OS
 .DS_Store
-/.idea
-pnpm-lock.yaml
+Thumbs.db
+
+# Development
+*.swp
+*.swo

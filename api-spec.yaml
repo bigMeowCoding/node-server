@@ -1,0 +1,497 @@
+openapi: 3.0.3
+info:
+  title: 商城系统 API
+  description: 商城系统后端 API 文档
+  version: 1.0.0
+tags:
+  - name: 用户认证
+    description: 用户登录、登出相关接口
+  - name: 商品管理
+    description: 商品相关接口
+  - name: 购物车管理
+    description: 购物车相关接口
+servers:
+  - url: http://localhost:3000
+    description: 本地开发服务器
+paths:
+  /api/auth/login:
+    post:
+      tags:
+        - 用户认证
+      summary: 用户登录
+      description: 用户使用用户名和密码登录
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: 用户名
+                  example: root
+                password:
+                  type: string
+                  description: 密码
+                  example: '123'
+              required:
+                - username
+                - password
+      responses:
+        '200':
+          description: 登录成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          username:
+                            type: string
+                            example: root
+                          loginTime:
+                            type: string
+                            format: date-time
+                            example: '2024-06-19T10:30:00.000Z'
+                  message:
+                    type: string
+                    example: 登录成功
+        '400':
+          description: 请求参数错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 用户名或密码不正确
+  /api/auth/logout:
+    post:
+      tags:
+        - 用户认证
+      summary: 用户登出
+      description: 用户退出登录
+      responses:
+        '200':
+          description: 登出成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 登出成功
+  /api/auth/me:
+    get:
+      tags:
+        - 用户认证
+      summary: 获取当前用户信息
+      description: 获取当前登录用户的信息
+      responses:
+        '200':
+          description: 成功获取用户信息
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      username:
+                        type: string
+                        example: root
+                      loginTime:
+                        type: string
+                        format: date-time
+                        example: '2024-06-19T10:30:00.000Z'
+        '401':
+          description: 未登录
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 请先登录
+  /api/products:
+    get:
+      tags:
+        - 商品管理
+      summary: 获取商品列表
+      description: 获取所有商品列表
+      responses:
+        '200':
+          description: 成功获取商品列表
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+  /api/products/{id}:
+    get:
+      tags:
+        - 商品管理
+      summary: 获取商品详情
+      description: 根据商品ID获取商品详情
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: 成功获取商品详情
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/Product'
+        '404':
+          description: 商品不存在
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 商品不存在
+  /api/cart:
+    get:
+      tags:
+        - 购物车管理
+      summary: 获取购物车
+      description: 获取当前用户的购物车
+      responses:
+        '200':
+          description: 成功获取购物车
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      items:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/CartItem'
+                      total:
+                        type: number
+                        example: 1198
+        '401':
+          description: 未登录
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 请先登录
+    post:
+      tags:
+        - 购物车管理
+      summary: 添加商品到购物车
+      description: 添加商品到购物车
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: integer
+                  description: 商品ID
+                  example: 1
+                quantity:
+                  type: integer
+                  description: 数量，默认为1
+                  example: 1
+              required:
+                - productId
+      responses:
+        '200':
+          description: 添加成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/CartItem'
+                  message:
+                    type: string
+                    example: 添加成功
+        '400':
+          description: 请求参数错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 商品不存在
+        '401':
+          description: 未登录
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 请先登录
+  /api/cart/{productId}:
+    put:
+      tags:
+        - 购物车管理
+      summary: 更新购物车商品数量
+      description: 更新购物车中商品的数量
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  description: 新的数量
+                  example: 2
+              required:
+                - quantity
+      responses:
+        '200':
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/CartItem'
+                  message:
+                    type: string
+                    example: 更新成功
+        '400':
+          description: 请求参数错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 数量必须大于0
+        '401':
+          description: 未登录
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 请先登录
+    delete:
+      tags:
+        - 购物车管理
+      summary: 从购物车删除商品
+      description: 从购物车中删除指定商品
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: 删除成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 删除成功
+        '401':
+          description: 未登录
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 请先登录
+  /api/cart/clear:
+    post:
+      tags:
+        - 购物车管理
+      summary: 清空购物车
+      description: 清空当前用户的购物车
+      responses:
+        '200':
+          description: 清空成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: 购物车已清空
+        '401':
+          description: 未登录
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: 请先登录
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: 无线蓝牙耳机 Pro
+        price:
+          type: number
+          example: 299
+        description:
+          type: string
+          example: 高品质无线蓝牙耳机，主动降噪，续航40小时
+        image:
+          type: string
+          example: https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop
+        category:
+          type: string
+          example: 电子产品
+        stock:
+          type: integer
+          example: 50
+    CartItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: 无线蓝牙耳机 Pro
+        price:
+          type: number
+          example: 299
+        description:
+          type: string
+          example: 高品质无线蓝牙耳机，主动降噪，续航40小时
+        image:
+          type: string
+          example: https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop
+        category:
+          type: string
+          example: 电子产品
+        stock:
+          type: integer
+          example: 50
+        quantity:
+          type: integer
+          example: 2
