@@ -36,7 +36,7 @@ export class CartService {
       }
       return {
         ...cartData.product,
-        id: cartData.id,
+        id: cartData.product.id,
         productId: cartData.productId,
         quantity: cartData.quantity,
       } as CartProductItem;
@@ -75,7 +75,7 @@ export class CartService {
     }
     return {
       ...itemData.product,
-      id: itemData.id,
+      id: itemData.product.id,
       productId: itemData.productId,
       quantity: itemData.quantity,
     } as CartProductItem;
@@ -108,7 +108,7 @@ export class CartService {
     }
     return {
       ...itemData.product,
-      id: itemData.id,
+      id: itemData.product.id,
       productId: itemData.productId,
       quantity: itemData.quantity,
     } as CartProductItem;

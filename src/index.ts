@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
+import { Sequelize } from 'sequelize';
 import sequelize from './config/database';
 import { errorMiddleware } from './middleware/error.middleware';
 import authRoutes from './routes/auth.routes';
@@ -24,11 +25,37 @@ app.use('/api/cart', cartRoutes);
 
 app.use(errorMiddleware);
 
+async function createDatabaseIfNotExists() {
+  const dbName = process.env.DB_DATABASE || 'shop_db';
+
+  const tempSequelize = new Sequelize({
+    host: process.env.DB_HOST || 'localhost',
+    port: parseInt(process.env.DB_PORT || '3306'),
+    dialect: 'mysql',
+    username: process.env.DB_USERNAME || 'root',
+    password: process.env.DB_PASSWORD || '',
+    logging: false,
+  });
+
+  try {
+    await tempSequelize.query(
+      `CREATE DATABASE IF NOT EXISTS \`${dbName}\` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;`
+    );
+    console.log('数据库已创建或已存在');
+  } catch (error) {
+    console.log('尝试创建数据库失败（可能已经存在）:', (error as Error).message);
+  } finally {
+    await tempSequelize.close();
+  }
+}
+
 async function startServer() {
   try {
+    await createDatabaseIfNotExists();
+
     await sequelize.sync({ force: false });
     console.log('数据库连接成功');
-    
+
     await ProductService.initSampleProducts();
     console.log('示例数据初始化完成');
 
