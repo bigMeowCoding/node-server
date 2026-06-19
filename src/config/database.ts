@@ -10,7 +10,7 @@ let sequelize: Sequelize;
 if (dbDialect === 'sqlite') {
   sequelize = new Sequelize({
     dialect: 'sqlite',
-    storage: ':memory:',
+    storage: './database.sqlite',
     logging: process.env.NODE_ENV === 'development' ? console.log : false,
   });
 } else {
