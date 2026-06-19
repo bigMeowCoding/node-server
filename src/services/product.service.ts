@@ -1,8 +1,23 @@
 import Product from '../models/Product';
+import { PaginationParams, PaginatedResult } from '../types';
 
 export class ProductService {
-  static async getAllProducts() {
-    return await Product.findAll();
+  static async getAllProducts(params?: PaginationParams): Promise<PaginatedResult<Product>> {
+    const page = Math.max(1, params?.page || 1);
+    const pageSize = Math.max(1, params?.pageSize || 10);
+    const offset = (page - 1) * pageSize;
+
+    const { count, rows: items } = await Product.findAndCountAll({
+      limit: pageSize,
+      offset,
+    });
+
+    return {
+      items,
+      total: count,
+      page,
+      pageSize,
+    };
   }
 
   static async getProductById(id: number) {

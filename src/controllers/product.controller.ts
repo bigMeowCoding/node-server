@@ -5,7 +5,9 @@ import { successResponse, errorResponse } from '../utils/response';
 export class ProductController {
   static async getAllProducts(req: Request, res: Response) {
     try {
-      const products = await ProductService.getAllProducts();
+      const page = req.query.page ? parseInt(req.query.page as string, 10) : undefined;
+      const pageSize = req.query.pageSize ? parseInt(req.query.pageSize as string, 10) : undefined;
+      const products = await ProductService.getAllProducts({ page, pageSize });
       return successResponse(res, products);
     } catch (error) {
       return errorResponse(res, (error as Error).message);

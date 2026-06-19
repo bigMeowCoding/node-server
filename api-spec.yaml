@@ -143,7 +143,22 @@ paths:
       tags:
         - 商品管理
       summary: 获取商品列表
-      description: 获取所有商品列表
+      description: 分页获取商品列表
+      parameters:
+        - name: page
+          in: query
+          description: 页码，从 1 开始
+          schema:
+            type: integer
+            default: 1
+            example: 1
+        - name: pageSize
+          in: query
+          description: 每页商品数量
+          schema:
+            type: integer
+            default: 10
+            example: 10
       responses:
         '200':
           description: 成功获取商品列表
@@ -156,9 +171,7 @@ paths:
                     type: boolean
                     example: true
                   data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/Product'
+                    $ref: '#/components/schemas/PaginatedProducts'
   /api/products/{id}:
     get:
       tags:
@@ -468,6 +481,22 @@ components:
         stock:
           type: integer
           example: 50
+    PaginatedProducts:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        total:
+          type: integer
+          example: 12
+        page:
+          type: integer
+          example: 1
+        pageSize:
+          type: integer
+          example: 10
     CartItem:
       type: object
       properties:

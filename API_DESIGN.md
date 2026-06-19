@@ -258,22 +258,30 @@ export interface ApiResponse<T = any> {
 ### 4.2 商品模块
 
 #### GET /api/products
-- **描述**: 获取商品列表
+- **描述**: 分页获取商品列表
+- **查询参数**:
+  - `page`: 页码，从 1 开始，默认 1
+  - `pageSize`: 每页数量，默认 10
 - **响应**:
   ```json
   {
     "success": true,
-    "data": [
-      {
-        "id": 1,
-        "name": "无线蓝牙耳机 Pro",
-        "price": 299,
-        "description": "高品质无线蓝牙耳机，主动降噪，续航40小时",
-        "image": "https://...",
-        "category": "电子产品",
-        "stock": 50
-      }
-    ]
+    "data": {
+      "items": [
+        {
+          "id": 1,
+          "name": "无线蓝牙耳机 Pro",
+          "price": 299,
+          "description": "高品质无线蓝牙耳机，主动降噪，续航40小时",
+          "image": "https://...",
+          "category": "电子产品",
+          "stock": 50
+        }
+      ],
+      "total": 12,
+      "page": 1,
+      "pageSize": 10
+    }
   }
   ```
 
